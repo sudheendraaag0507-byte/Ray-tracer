@@ -27,6 +27,7 @@ class camera {
 			aliasing_constant = 1.0f / sample_rate;
 			out << "P3\n" << image_width << " " << image_hieght << "\n255\n";
 
+			//#pragma omp parallel for schedule(dynamic, 4)
 			for (int i = 0; i < image_hieght; i++) {
 				
 				for (int j = 0; j < image_width; j++) {
@@ -39,7 +40,6 @@ class camera {
 						new_color = rayColor(new_ray,max_depth,world);
 						aliasing_sample += new_color;
 					}
-					//std::cout << aliasing_sample << "\n";
 					pixelWrite(out, aliasing_constant * aliasing_sample);
 				}
 			}

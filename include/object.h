@@ -67,7 +67,7 @@ class concave_mirror : public hittable {
 				rey.t = root;
 				rey.p = p;
 				rey.mat = mat;
-				rey.bmat = make_shared<lambertian>(color(0.25,0.25,0.25));
+				rey.bmat = make_shared<lambertian>(color(0.05,0.05,0.05));
 				rey.faceout((p - centre) / radius, r);
 				return true;
 			}
@@ -151,4 +151,31 @@ class convex_lens : public hittable {
 		double focal_length;
 		double radius;
 		shared_ptr<material> mat;
+};
+
+class plane_mirror : public hittable {
+	public:
+		plane_mirror(const point3& centre, const vec3& normal, double radius, shared_ptr<material> mat) : centre(centre), normal(unit_vector(normal)), radius(radius), mat(mat) {}
+
+		bool hit(const ray& r, hit_rec& rey, double t_min, double t_max) const override {
+			auto denom = dot(r.direction(), normal);
+			if (std::fabs(denom) < 1e-12) return false;              
+			auto t = dot(centre - r.point(), normal) / denom;
+			if (t < t_min || t > t_max) return false;
+			point3 p = r.moveBy(t);
+			vec3 q = p - centre;
+			if (dot(q, q) > radius * radius) return false;           
+			rey.t = t; 
+			rey.p = p; 
+			rey.mat = mat;
+			rey.bmat = make_shared<lambertian>(color(0.05, 0.05, 0.05));
+			rey.faceout(normal, r);
+			return true;
+		}
+	private:
+		double radius ;
+		vec3 normal ;
+		point3 centre ;
+		shared_ptr<material> mat ;
+
 };

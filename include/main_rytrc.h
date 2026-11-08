@@ -5,6 +5,8 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <omp.h>
+#include <random>
 
 
 // C++ Std Usings
@@ -24,7 +26,9 @@ inline double degrees_to_radians(double degrees) {
 }
 
 inline double random_double() {
-    return std::rand()/(RAND_MAX + 1.0f) ;
+    static thread_local std::mt19937 gen(std::random_device{}());
+    static thread_local std::uniform_real_distribution<double> dist(0.0, 1.0);
+    return dist(gen);
 }
 
 inline double clamp(double value , double min , double max) {
