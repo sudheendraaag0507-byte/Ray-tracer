@@ -11,6 +11,7 @@ class hit_rec {
 	double t;
 	point3 p;
 	shared_ptr<material> mat;
+	shared_ptr<material> bmat;
 	vec3 normal;
 	bool out;
 
@@ -18,6 +19,9 @@ class hit_rec {
 		
 		out = (dot(norm , extr.direction()) < 0);
 		normal = (out) ? norm : -1*norm;
+		if (out) {
+			mat = bmat;
+		}
 	}
 
 };

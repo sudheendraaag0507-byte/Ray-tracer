@@ -39,6 +39,7 @@ class camera {
 						new_color = rayColor(new_ray,max_depth,world);
 						aliasing_sample += new_color;
 					}
+					//std::cout << aliasing_sample << "\n";
 					pixelWrite(out, aliasing_constant * aliasing_sample);
 				}
 			}
@@ -128,7 +129,7 @@ class camera {
 			auto unit_vector = r.direction() / r.direction().length();
 
 			auto a = (unit_vector.y() + 1.0) * 0.5;
-
+			
 			return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
 		}
 
